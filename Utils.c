@@ -44,6 +44,23 @@ int32_t HexaToDecG(int32_t value,int32_t lbs)
 	return value;
 }
 
+int32_t HexaToDecGyro(int32_t values)
+{
+	const int32_t pozz=MAX_POZ_VAL_G;
+		const int32_t maxx=MAX_VAL_G;
+
+		if(values>pozz)
+			{
+				values=((values-maxx)*1000/131);
+			}
+
+		else
+			{
+				values=(values*1000/131);
+			}
+	return values;
+}
+
 
 
 

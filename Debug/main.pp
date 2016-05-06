@@ -59,6 +59,9 @@ main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/stdio.h
 main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/stdarg.h
 main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/stdlib.h
 main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h
+main.obj: C:/ti/ccsv6/ccs_base/arm/include/msp432.h
+main.obj: ../Accelerometer.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h
 
 ../main.c: 
 C:/Users/PetruAlexandru/workspace_v6_1/layers123/driverlib/MSP432P4xx/driverlib.h: 
@@ -118,4 +121,7 @@ C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h:
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/stdio.h: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/stdarg.h: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/stdlib.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h: 
+C:/ti/ccsv6/ccs_base/arm/include/msp432.h: 
+../Accelerometer.h: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h: 

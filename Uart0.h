@@ -22,5 +22,7 @@ void SendString(uint32_t uartModuleBaseAdress,char* myString);
 
 void SetPeriod(uint32_t period);
 
+void StartAquisition();
+
 
 #endif /* UART0_H_ */

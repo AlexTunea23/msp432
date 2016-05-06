@@ -51,6 +51,13 @@ Uart0.obj: C:/Users/PetruAlexandru/workspace_v6_1/layers123/driverlib/MSP432P4xx
 Uart0.obj: C:/Users/PetruAlexandru/workspace_v6_1/layers123/driverlib/MSP432P4xx/wdt_a.h
 Uart0.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/stdio.h
 Uart0.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h
+Uart0.obj: ../Sensors.h
+Uart0.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h
+Uart0.obj: ../UartCommands.h
+Uart0.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h
+Uart0.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/stdlib.h
+Uart0.obj: ../Utils.h
+Uart0.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h
 
 ../Uart0.c: 
 ../Uart0.h: 
@@ -102,4 +109,11 @@ C:/Users/PetruAlexandru/workspace_v6_1/layers123/driverlib/MSP432P4xx/timer_a.h:
 C:/Users/PetruAlexandru/workspace_v6_1/layers123/driverlib/MSP432P4xx/uart.h: 
 C:/Users/PetruAlexandru/workspace_v6_1/layers123/driverlib/MSP432P4xx/wdt_a.h: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/stdio.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h: 
+../Sensors.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h: 
+../UartCommands.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/stdlib.h: 
+../Utils.h: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h: 

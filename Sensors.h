@@ -23,8 +23,12 @@ typedef enum
 {
 	xAxis,
 	yAxis,
-	zAxis
-}AxisSensors;
+	zAxis,
+	xAxisGyro,
+	yAxisGyro,
+	zAxisGyro,
+	Tempp
+}MpuSensor;
 
 typedef enum
 {
@@ -38,7 +42,7 @@ void InitSensors(IdSensors Name);
 
 void ConfigSensors(RangeConfig range);
 
-int32_t ReadSensors(AxisSensors Axiss);
+int32_t ReadSensors(MpuSensor Device);
 
 
 #endif /* SENSORS_H_ */

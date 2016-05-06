@@ -41,9 +41,9 @@ Uart UartModule0=
 		.uartConfiguration=
 		{
 				EUSCI_A_UART_CLOCKSOURCE_SMCLK,          // SMCLK Clock Source
-		        78,                                     // BRDIV = 78////hjjhihouiykiu7ku
-		        2,                                       // UCxBRF = 2
-		        0,                                       // UCxBRS = 0
+		        6,                                     // BRDIV = 78////hjjhihouiykiu7ku
+		        8,                                       // UCxBRF = 2
+		        32,                                       // UCxBRS = 0
 		        EUSCI_A_UART_NO_PARITY,                  // No Parity
 		        EUSCI_A_UART_LSB_FIRST,                  // MSB First
 		        EUSCI_A_UART_ONE_STOP_BIT,               // One stop bit
@@ -80,7 +80,7 @@ void InitUarts(UartMoudule name)
 
 void InitUartReceive()
 {
-	WDTCTL = WDTPW | WDTHOLD;               // Stop watchdog timer
+
 
 	  CSKEY = 0x695A;                        // Unlock CS module for register access
 	  CSCTL0 = 0;                            // Reset tuning parameters
@@ -90,7 +90,7 @@ void InitUartReceive()
 	  CSKEY = 0;                             // Lock CS module from unintended accesses
 
 	  // Configure UART pins
-	  P1SEL0 |= BIT2 | BIT3;
+	  P1SEL0 |= BIT2 | BIT3;                  // set 2-UART pin as second function
 
 	  __enable_interrupt();
 	  NVIC_ISER0 = 1 << ((INT_EUSCIA0 - 16) & 31); // Enable eUSCIA0 interrupt in NVIC module
@@ -98,15 +98,18 @@ void InitUartReceive()
 	  // Configure UART
 	  UCA0CTLW0 |= UCSWRST;
 	  UCA0CTLW0 |= UCSSEL__SMCLK;             // Put eUSCI in reset
-
+	  // Baud Rate calculation
+	  // 12000000/(16*9600) = 78.125
+	  // Fractional portion = 0.125
+	  // User's Guide Table 21-4: UCBRSx = 0x10
+	  // UCBRFx = int ( (78.125-78)*16) = 2
 	  UCA0BR0 = 78;                           // 12000000/16/9600
 	  UCA0BR1 = 0x00;
 	  UCA0MCTLW = 0x1000 | UCOS16 | 0x0020;
 
-	  UCA0CTLW0 &= ~UCSWRST;
-	  UCA0IE |= UCRXIE;
+	  UCA0CTLW0 &= ~UCSWRST;                  // Initialize eUSCI
+	  UCA0IE |= UCRXIE;                       // Enable USCI_A0 RX interrupt
 }
-
 
 void SendCharacterData(char c)
 {
@@ -131,7 +134,7 @@ void UartCommands(char comm[30])
 	if(strcmp(command,"start")==0)
 	{
 		verifyFlag=1;
-		SendAccelData("OK");
+		StartAquisition();
 		//SendAccelData("x,y,z");
 
 		//functia de send cu timere

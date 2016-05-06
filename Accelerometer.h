@@ -19,8 +19,16 @@ typedef enum
 {
 	XAxis,
 	YAxis,
-	ZAxis
+	ZAxis,
+
 }AxisAccelerometer;
+
+typedef enum
+{
+	XAxisG,
+	YAxisG,
+	ZAxisG
+}AxisGyroscope;
 
 typedef enum
 {
@@ -29,6 +37,11 @@ typedef enum
 	Range8G,
 	Range16G
 }RangeAccelerometer;
+
+typedef enum
+{
+	Temp
+}Temperature;
 
 typedef enum
 {
@@ -43,5 +56,9 @@ void InitAccelerometer(Accelerometer Id);
 void ConfigAccelerometer(RangeAccelerometer Range);
 
 int32_t ReadAccelerometer(AxisAccelerometer Axis);
+
+int32_t ReadGyroscope(AxisGyroscope AxisG);
+
+int16_t ReadTemperature(Temperature temp);
 
 #endif /* ACCELEROMETER_H_ */

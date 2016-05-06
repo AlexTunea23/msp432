@@ -11,6 +11,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include "Sensors.h"
+#include"UartCommands.h"
+#include"Utils.h"
 
 
 
@@ -50,6 +53,50 @@ void SendString(uint32_t uartModuleBaseAdress,char* myString)
 void SetPeriod(uint32_t period)
 {
 
+}
+
+void SendUartTest(char *a, char *b, char *c)
+{
+	SendAccelData("x");
+	SendAccelData(";");
+	SendAccelData("y");
+	SendAccelData(";");
+	SendAccelData("z");
+	SendAccelData(";");
+	SendAccelData("a");
+	SendAccelData("@");
+	SendAccelData(a);
+	SendAccelData(",");
+	SendAccelData(b);
+	SendAccelData(",");
+	SendAccelData(c);
+	SendAccelData(",");
+	SendAccelData("40");
+	//SendAccelData(",");
+
+	SendCharacterData(10);
+	SendCharacterData(13);
+}
+
+
+void StartAquisition()
+{
+	uint32_t i;
+	static int32_t mpuXVal=0;
+	static int32_t mpuYVal=0;
+	static int32_t mpuZVal=0;
+	mpuXVal=ReadSensors(xAxis);
+	mpuYVal=ReadSensors(yAxis);
+	mpuZVal=ReadSensors(zAxis);
+	char xVal[16];
+	char yVal[16];
+	char zVal[16];
+
+	strcpy(xVal, IntToString(mpuXVal));
+    strcpy(yVal, IntToString(mpuYVal));
+    strcpy(zVal, IntToString(mpuZVal));
+    SendUartTest(xVal,yVal,zVal);
+	for(i=0;i<=100000;i++);
 }
 
 

@@ -45,10 +45,10 @@ void ConfigSensors(RangeConfig range)
 
 
 
-int32_t ReadSensors(AxisSensors Axiss)
+int32_t ReadSensors(MpuSensor Device)
 {
 	static int32_t readValue=0;
-	switch(Axiss)
+	switch(Device)
 	{
 	case xAxis:
 		readValue=ReadAccelerometer(XAxis);
@@ -58,8 +58,20 @@ int32_t ReadSensors(AxisSensors Axiss)
 		break;
 	case zAxis:
 		readValue=ReadAccelerometer(ZAxis);
-	default:
 		break;
+	case xAxisGyro:
+		readValue=ReadGyroscope(XAxisG);
+		break;
+	case yAxisGyro:
+		readValue=ReadGyroscope(YAxisG);
+		break;
+	case zAxisGyro:
+		readValue=ReadGyroscope(ZAxisG);
+		break;
+	case Tempp:
+		readValue=ReadTemperature(Temp);
+	default:
+			break;
 	}
 	return readValue;
 }

@@ -59,6 +59,8 @@ extern unsigned long __STACK_END;
 /* To be added by user */
 
 extern void euscia0_isr();
+extern void timer_a_0_isr();
+extern void timer_a_1_isr();
 
 
 
@@ -93,9 +95,9 @@ void (* const interruptVectors[])(void) =
     defaultISR,                             /* FLCTL ISR                 */
 	defaultISR,                             /* COMP0 ISR                 */
     defaultISR,                             /* COMP1 ISR                 */
-    defaultISR,                             /* TA0_0 ISR                 */
+	timer_a_1_isr,                          	/* TA0_0 ISR                 */
     defaultISR,                             /* TA0_N ISR                 */
-    defaultISR,                             /* TA1_0 ISR                 */
+	timer_a_0_isr,                          /* TA1_0 ISR                 */
     defaultISR,                             /* TA1_N ISR                 */
     defaultISR,                             /* TA2_0 ISR                 */
     defaultISR,                             /* TA2_N ISR                 */

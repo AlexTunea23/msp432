@@ -16,29 +16,34 @@
 #define POWER_REGISTER_DATA 						0
 #define SLAVE_ADRESS_MPU 							0x68
 
-#define X_LOW_REGISTER_ADRESS_MPU 					0x3C
-#define X_HIGH_REGISTER_ADRESS_MPU 					0x3B
-#define Y_LOW_REGISTER_ADRESS_MPU 					0x3E
-#define Y_HIGH_REGISTER_ADRESS_MPU 					0x3D
-#define Z_LOW_REGISTER_ADRESS_MPU 					0x40
-#define Z_HIGH_REGISTER_ADRESS_MPU 					0x3F
+#define X_LOW_REGISTER_ADRESS_MPU_ACC 				0x3C
+#define X_HIGH_REGISTER_ADRESS_MPU_ACC 				0x3B
+#define Y_LOW_REGISTER_ADRESS_MPU_ACC 				0x3E
+#define Y_HIGH_REGISTER_ADRESS_MPU_ACC 				0x3D
+#define Z_LOW_REGISTER_ADRESS_MPU_ACC 				0x40
+#define Z_HIGH_REGISTER_ADRESS_MPU_ACC 				0x3F
 
-#define X_LOW_REGISTER_ADRESS_GY  					0x3C
-#define X_HIGH_REGISTER_ADRESS_GY   				0x3B
-#define Y_LOW_REGISTER_ADRESS_GY  					0x3E
-#define Y_HIGH_REGISTER_ADRESS_GY  					0x3D
-#define Z_LOW_REGISTER_ADRESS_GY  					0x40
-#define Z_HIGH_REGISTER_ADRESS_GY  					0x3F
-
-#define CONFIG_REGISTER_ADRESS_MPU					0x1C
-#define RANGE_2G_CONFIG_REGISTER_DATA				0
-#define RANGE_4G_CONFIG_REGISTER_DATA				0x08
-#define RANGE_8G_CONFIG_REGISTER_DATA				0x10
-#define RANGE_16G_CONFIG_REGISTER_DATA				0x18
+#define CONFIG_REGISTER_ADRESS_MPU_ACC				0x1C
+#define RANGE_2G_CONFIG_REGISTER_DATA_ACC			0
+#define RANGE_4G_CONFIG_REGISTER_DATA_ACC			0x08
+#define RANGE_8G_CONFIG_REGISTER_DATA_ACC			0x10
+#define RANGE_16G_CONFIG_REGISTER_DATA_ACC			0x18
 #define LBS_2G										16384
 #define LBS_4G										8192
 #define LBS_8G										4096
 #define LBS_16G										2048
+
+#define X_LOW_REGISTER_ADRESS_GYRO  				0x44
+#define X_HIGH_REGISTER_ADRESS_GYRO   				0x43
+
+#define Y_LOW_REGISTER_ADRESS_GYRO  				0x46
+#define Y_HIGH_REGISTER_ADRESS_GYRO  				0x45
+
+#define Z_LOW_REGISTER_ADRESS_GYRO  				0x48
+#define Z_HIGH_REGISTER_ADRESS_GYRO  				0x47
+
+#define TLOW										0x42
+#define THIGH										0x41
 
 
 typedef struct Sensors
@@ -67,6 +72,14 @@ typedef struct Sensors
 	uint32_t lbs4G;
 	uint32_t lbs8G;
 	uint32_t lbs16G;
+	uint8_t tLow;
+	uint8_t tHigh;
+	uint8_t xLowAdressGyro;
+	uint8_t xHighAdressGyro;
+	uint8_t yLowAdressGyro;
+	uint8_t yHighAdressGyro;
+	uint8_t zLowAdressGyro;
+	uint8_t zHighAdressGyro;
 
 }Sensor;
 
@@ -78,27 +91,36 @@ Sensor sensorMpu=
 		.i2cConfiguration=
 		{
 				EUSCI_B_I2C_CLOCKSOURCE_SMCLK,3000000,
-				EUSCI_B_I2C_SET_DATA_RATE_100KBPS,
+				EUSCI_B_I2C_SET_DATA_RATE_400KBPS,
 				EUSCI_B_I2C_NO_AUTO_STOP
 		},
 		.i2cPort=GPIO_PORT_P1,
 		.sdaPin=GPIO_PIN6,
 		.sclPin=GPIO_PIN7,
 		.primaryModuleFunction=GPIO_PRIMARY_MODULE_FUNCTION,
-		.xLowAdress=X_LOW_REGISTER_ADRESS_MPU,
-		.xHighAdress=X_HIGH_REGISTER_ADRESS_MPU,
-		.yLowAdress=Y_LOW_REGISTER_ADRESS_MPU,
-		.yHighAdress=Y_HIGH_REGISTER_ADRESS_MPU,
-		.zLowAdress=Z_LOW_REGISTER_ADRESS_MPU,
-		.zHighAdress=Z_HIGH_REGISTER_ADRESS_MPU,
-		.range2G=RANGE_2G_CONFIG_REGISTER_DATA,
-		.range4G=RANGE_4G_CONFIG_REGISTER_DATA,
-		.range8G=RANGE_8G_CONFIG_REGISTER_DATA,
-		.range16G=RANGE_16G_CONFIG_REGISTER_DATA,
+		.xLowAdress=X_LOW_REGISTER_ADRESS_MPU_ACC,
+		.xHighAdress=X_HIGH_REGISTER_ADRESS_MPU_ACC,
+		.yLowAdress=Y_LOW_REGISTER_ADRESS_MPU_ACC,
+		.yHighAdress=Y_HIGH_REGISTER_ADRESS_MPU_ACC,
+		.zLowAdress=Z_LOW_REGISTER_ADRESS_MPU_ACC,
+		.zHighAdress=Z_HIGH_REGISTER_ADRESS_MPU_ACC,
+		.range2G=RANGE_2G_CONFIG_REGISTER_DATA_ACC,
+		.range4G=RANGE_4G_CONFIG_REGISTER_DATA_ACC,
+		.range8G=RANGE_8G_CONFIG_REGISTER_DATA_ACC,
+		.range16G=RANGE_16G_CONFIG_REGISTER_DATA_ACC,
 		.lbs2G=LBS_2G,
 		.lbs4G=LBS_4G,
 		.lbs8G=LBS_8G,
-		.lbs16G=LBS_16G
+		.lbs16G=LBS_16G,
+		.tLow=TLOW,
+		.tHigh=THIGH,
+
+		.xHighAdressGyro=X_HIGH_REGISTER_ADRESS_GYRO,
+		.xLowAdressGyro=X_LOW_REGISTER_ADRESS_GYRO,
+		.yHighAdressGyro=Y_HIGH_REGISTER_ADRESS_GYRO,
+		.yLowAdressGyro=Y_LOW_REGISTER_ADRESS_GYRO,
+		.zHighAdressGyro=Z_HIGH_REGISTER_ADRESS_GYRO,
+		.zLowAdressGyro=Z_LOW_REGISTER_ADRESS_GYRO
 };
 
 Sensor defaultSensor;
@@ -183,6 +205,48 @@ int32_t ReadAccelerometer(AxisAccelerometer Axis)
 	return dataReceived;
 }
 
+int16_t ReadTemperature(Temperature temp)
+{
+	static uint8_t dataReceivedLow=0;
+	static uint8_t dataReceivedHigh=0;
+	static int16_t temperature;
+
+	dataReceivedLow=ReadI2c0(defaultSensor.moduleBaseAdress,defaultSensor.tLow);
+	dataReceivedHigh=ReadI2c0(defaultSensor.moduleBaseAdress,defaultSensor.tHigh);
+	temperature=(dataReceivedHigh<<8)|(dataReceivedLow);
+	temperature=(temperature/340+36.53);
+	return temperature;
+}
+
+int32_t ReadGyroscope(AxisGyroscope AxisG)
+{
+		defaultSensor=sensorMpu;
+		static uint8_t dataReceivedLowGyro=0;
+		static uint8_t dataReceivedHighGyro=0;
+		static uint32_t dataReceivedHighLowGyro=0;
+
+
+		switch(AxisG)
+		{
+		case XAxisG:
+			dataReceivedLowGyro=ReadI2c0(defaultSensor.moduleBaseAdress,defaultSensor.xLowAdressGyro);
+			dataReceivedHighGyro=ReadI2c0(defaultSensor.moduleBaseAdress,defaultSensor.xHighAdressGyro);
+			break;
+		case YAxisG:
+			dataReceivedLowGyro=ReadI2c0(defaultSensor.moduleBaseAdress,defaultSensor.yLowAdressGyro);
+			dataReceivedHighGyro=ReadI2c0(defaultSensor.moduleBaseAdress,defaultSensor.yHighAdressGyro);
+		case ZAxisG:
+			dataReceivedLowGyro=ReadI2c0(defaultSensor.moduleBaseAdress,defaultSensor.zLowAdressGyro);
+			dataReceivedHighGyro=ReadI2c0(defaultSensor.moduleBaseAdress,defaultSensor.zHighAdressGyro);
+		break;
+		default:
+			break;
+		}
+		dataReceivedHighLowGyro=(dataReceivedHighGyro<<8)|(dataReceivedLowGyro);
+		dataReceivedHighLowGyro=HexaToDecGyro(dataReceivedHighLowGyro);
+		//dataReceivedHighLowGyro=(dataReceivedHighLowGyro/131);
+		return dataReceivedHighLowGyro;
+}
 
 
 
