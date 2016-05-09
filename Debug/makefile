@@ -12,6 +12,7 @@ GEN_CMDS__FLAG :=
 ORDERED_OBJS += \
 "./Accelerometer.obj" \
 "./Sensors.obj" \
+"./Timers.obj" \
 "./Uart0.obj" \
 "./UartCommands.obj" \
 "./Utils.obj" \
@@ -157,8 +158,8 @@ layers123.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "Accelerometer.pp" "Sensors.pp" "Uart0.pp" "UartCommands.pp" "Utils.pp" "i2c0.pp" "main.pp" "msp432_startup_ccs.pp" 
-	-$(RM) "Accelerometer.obj" "Sensors.obj" "Uart0.obj" "UartCommands.obj" "Utils.obj" "i2c0.obj" "main.obj" "msp432_startup_ccs.obj" 
+	-$(RM) "Accelerometer.pp" "Sensors.pp" "Timers.pp" "Uart0.pp" "UartCommands.pp" "Utils.pp" "i2c0.pp" "main.pp" "msp432_startup_ccs.pp" 
+	-$(RM) "Accelerometer.obj" "Sensors.obj" "Timers.obj" "Uart0.obj" "UartCommands.obj" "Utils.obj" "i2c0.obj" "main.obj" "msp432_startup_ccs.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

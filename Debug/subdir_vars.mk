@@ -12,6 +12,7 @@ LIB_SRCS += \
 C_SRCS += \
 ../Accelerometer.c \
 ../Sensors.c \
+../Timers.c \
 ../Uart0.c \
 ../UartCommands.c \
 ../Utils.c \
@@ -22,6 +23,7 @@ C_SRCS += \
 OBJS += \
 ./Accelerometer.obj \
 ./Sensors.obj \
+./Timers.obj \
 ./Uart0.obj \
 ./UartCommands.obj \
 ./Utils.obj \
@@ -32,6 +34,7 @@ OBJS += \
 C_DEPS += \
 ./Accelerometer.pp \
 ./Sensors.pp \
+./Timers.pp \
 ./Uart0.pp \
 ./UartCommands.pp \
 ./Utils.pp \
@@ -42,6 +45,7 @@ C_DEPS += \
 C_DEPS__QUOTED += \
 "Accelerometer.pp" \
 "Sensors.pp" \
+"Timers.pp" \
 "Uart0.pp" \
 "UartCommands.pp" \
 "Utils.pp" \
@@ -52,6 +56,7 @@ C_DEPS__QUOTED += \
 OBJS__QUOTED += \
 "Accelerometer.obj" \
 "Sensors.obj" \
+"Timers.obj" \
 "Uart0.obj" \
 "UartCommands.obj" \
 "Utils.obj" \
@@ -62,6 +67,7 @@ OBJS__QUOTED += \
 C_SRCS__QUOTED += \
 "../Accelerometer.c" \
 "../Sensors.c" \
+"../Timers.c" \
 "../Uart0.c" \
 "../UartCommands.c" \
 "../Utils.c" \

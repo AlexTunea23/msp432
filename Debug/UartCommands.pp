@@ -56,6 +56,9 @@ UartCommands.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h
 UartCommands.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/stdlib.h
 UartCommands.obj: ../Utils.h
 UartCommands.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h
+UartCommands.obj: ../Sensors.h
+UartCommands.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h
+UartCommands.obj: ../Timers.h
 
 ../UartCommands.c: 
 ../Uart0.h: 
@@ -113,3 +116,6 @@ C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h:
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/stdlib.h: 
 ../Utils.h: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h: 
+../Sensors.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/string.h: 
+../Timers.h: 

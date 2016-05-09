@@ -1,1 +1,1 @@
-"./Accelerometer.obj" "./Sensors.obj" "./Uart0.obj" "./UartCommands.obj" "./Utils.obj" "./i2c0.obj" "./main.obj" "./msp432_startup_ccs.obj" "../msp432p401r.cmd" "../msp432p4xx_driverlib.lib" -l"libc.a" 
+"./Accelerometer.obj" "./Sensors.obj" "./Timers.obj" "./Uart0.obj" "./UartCommands.obj" "./Utils.obj" "./i2c0.obj" "./main.obj" "./msp432_startup_ccs.obj" "../msp432p401r.cmd" "../msp432p4xx_driverlib.lib" -l"libc.a" 

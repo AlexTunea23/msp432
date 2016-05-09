@@ -14,9 +14,80 @@
 #include <string.h>
 #include"UartCommands.h"
 #include"Utils.h"
+#include "Sensors.h"
+#include "Timers.h"
 #define sendingModule EUSCI_A0_MODULE
+#define BUFFER_SIZE  510
+
+//uint8_t monitorFlag=0;
+
+
+
+int valueX,valueX1;
+int valueY,valueY1;
+int valueZ,valueZ1;
+
+int valueXg;
+int valueYg;
+int valueZg;
+
+int received_byte;
+char xVal[16];
+char yVal[16];
+char zVal[16];
+
+
+
 
 uint8_t verifyFlag=0;
+
+
+
+
+
+
+
+
+struct Buffer {
+   int data[BUFFER_SIZE];
+    int newest_index;
+    int oldest_index;
+};
+
+enum BufferStatus {BUFFER_OK, BUFFER_EMPTY, BUFFER_FULL};
+
+volatile struct Buffer rx_buffer = {{}, 0, 0};
+enum BufferStatus status;
+
+
+
+
+enum BufferStatus bufferWrite(volatile struct Buffer *buffer, int byte){
+    int next_index = (((buffer->newest_index)+1) % BUFFER_SIZE);
+
+    if (next_index == buffer->oldest_index){
+        return BUFFER_FULL;
+    }
+
+    buffer->data[buffer->newest_index] = byte;
+    buffer->newest_index = next_index;
+        return BUFFER_OK;
+}
+
+enum BufferStatus bufferRead(volatile struct Buffer *buffer, int *byte){
+
+    if (buffer->newest_index == buffer->oldest_index){
+        return BUFFER_EMPTY;
+    }
+
+    *byte = buffer->data[buffer->oldest_index];
+    buffer->oldest_index = ((buffer->oldest_index+1) % BUFFER_SIZE);
+        return BUFFER_OK;
+}
+
+
+
+
 
 typedef struct Uarts
 {
@@ -29,6 +100,8 @@ typedef struct Uarts
 	uint8_t primaryModuleFunction;
 
 }Uart;
+
+Uart defaultUartModule;
 
 
 Uart UartModule0=
@@ -61,7 +134,8 @@ typedef enum
 }UartSend;
 
 
-Uart defaultUartModule;
+
+
 
 void InitUarts(UartMoudule name)
 {
@@ -103,9 +177,9 @@ void InitUartReceive()
 	  // Fractional portion = 0.125
 	  // User's Guide Table 21-4: UCBRSx = 0x10
 	  // UCBRFx = int ( (78.125-78)*16) = 2
-	  UCA0BR0 = 78;                           // 12000000/16/9600
+	  UCA0BR0 = 6;                           // 12000000/16/9600
 	  UCA0BR1 = 0x00;
-	  UCA0MCTLW = 0x1000 | UCOS16 | 0x0020;
+	  UCA0MCTLW = 0x1100 | UCOS16 | 0x0080;
 
 	  UCA0CTLW0 &= ~UCSWRST;                  // Initialize eUSCI
 	  UCA0IE |= UCRXIE;                       // Enable USCI_A0 RX interrupt
@@ -134,10 +208,7 @@ void UartCommands(char comm[30])
 	if(strcmp(command,"start")==0)
 	{
 		verifyFlag=1;
-		StartAquisition();
-		//SendAccelData("x,y,z");
-
-		//functia de send cu timere
+		initTimers();
 	}
 
 	if(strcmp(command,"stop")==0)
@@ -163,13 +234,59 @@ void UartCommands(char comm[30])
 }
 
 
+void Add()
+{
+			valueX=ReadSensors(xAxis);
+			valueY=ReadSensors(yAxis);
+			valueZ=ReadSensors(zAxis);
+			bufferWrite(&rx_buffer, valueX);
+			bufferWrite(&rx_buffer, valueY);
+			bufferWrite(&rx_buffer, valueZ);
+
+}
+
+void Send()
+{
+		status = bufferRead(&rx_buffer, &received_byte);
+		strcpy(xVal, IntToString(received_byte));
+		SendAccelData(xVal);
+		SendAccelData(",");
+		status = bufferRead(&rx_buffer, &received_byte);
+		strcpy(yVal, IntToString(received_byte));
+		SendAccelData(yVal);
+		SendAccelData(",");
+		status = bufferRead(&rx_buffer, &received_byte);
+		strcpy(zVal, IntToString(received_byte));
+		SendAccelData(zVal);
+		SendAccelData(",");
+		SendCharacterData(10);
+		SendCharacterData(13);
+}
+
+uint8_t Monitoring()
+{
+	uint8_t flag=0;
+	uint8_t flag1=0;
 
 
+	if(flag1==0)
+	{
+	valueX1=ReadSensors(xAxis);
+	valueY1=ReadSensors(yAxis);
+	valueZ1=ReadSensors(zAxis);
+	flag1=1;
+	}
+
+	valueX=ReadSensors(xAxis);
+	valueY=ReadSensors(yAxis);
+	valueZ=ReadSensors(zAxis);
 
 
-
-
-
-
+	if(valueX>valueX1+50 | valueY>valueY1+50 | valueZ>valueZ1+50)
+		{
+			flag=1;
+		}
+	return flag;
+}
 
 

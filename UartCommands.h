@@ -23,11 +23,9 @@ typedef enum
 
 typedef enum
 {
-	start,
-	stop,
-	setPeriod
+	startAcc,
+	startGyro
 }Commands;
-
 
 
 void InitUarts(UartMoudule name);
@@ -35,6 +33,9 @@ void InitUartReceive();
 void SendCharacterData(char c);
 void SendAccelData(char *s);
 void UartCommands(char comm[30]);
+void Send();
+void Add();
+uint8_t Monitoring();
 
 
 
