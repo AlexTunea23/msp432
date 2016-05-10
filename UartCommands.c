@@ -200,7 +200,7 @@ void SendAccelData(char *s)
 void UartCommands(char comm[30])
 {
 
-	uint32_t periodConfig;
+	uint32_t periodConfiguration;
 	static char *command;
 	static char *setValue;
 	command=strtok(comm,"=");
@@ -222,8 +222,8 @@ void UartCommands(char comm[30])
 		if(verifyFlag==0)
 		{
 			setValue=strtok(NULL,"}");
-			periodConfig=atoi(setValue);
-			SetPeriod(periodConfig);//uint32t
+			periodConfiguration=atoi(setValue);
+			SetTimersPeriod(periodConfiguration);
 			SendAccelData("OK");
 		}
 		else
@@ -248,20 +248,31 @@ void Add()
 void Send()
 {
 		status = bufferRead(&rx_buffer, &received_byte);
+		if(status==BUFFER_OK)
+		{
 		strcpy(xVal, IntToString(received_byte));
+		SendAccelData("$");
 		SendAccelData(xVal);
 		SendAccelData(",");
+		}
+		if(status==BUFFER_OK)
+		{
 		status = bufferRead(&rx_buffer, &received_byte);
 		strcpy(yVal, IntToString(received_byte));
 		SendAccelData(yVal);
 		SendAccelData(",");
+		}
+		if(status==BUFFER_OK)
+		{
 		status = bufferRead(&rx_buffer, &received_byte);
 		strcpy(zVal, IntToString(received_byte));
 		SendAccelData(zVal);
-		SendAccelData(",");
+		//SendAccelData(",");
 		SendCharacterData(10);
 		SendCharacterData(13);
+		}
 }
+
 
 uint8_t Monitoring()
 {
@@ -282,7 +293,7 @@ uint8_t Monitoring()
 	valueZ=ReadSensors(zAxis);
 
 
-	if(valueX>valueX1+50 | valueY>valueY1+50 | valueZ>valueZ1+50)
+	if(valueX>valueX1+50 | valueX<valueX1-50 | valueY>valueY1+50 | valueY<valueY1-50| valueZ>valueZ1+50 | valueZ<valueZ1-50 )
 		{
 			flag=1;
 		}

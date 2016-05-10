@@ -13,5 +13,8 @@
 void setSystemClock(uint32_t CPU_Frequency);
 void startCrystalOscillator(void);
 void initTimers(void);
+void SetTimersPeriod(uint32_t periodConfig);
+
+
 
 #endif /* TIMERS_H_ */

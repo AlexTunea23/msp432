@@ -13,18 +13,6 @@
 #define CPU_FREQ                    (48000000)
 
 
-
-const Timer_A_UpModeConfig upConfig =
-{
-        TIMER_A_CLOCKSOURCE_SMCLK,              // SMCLK Clock Source
-        TIMER_A_CLOCKSOURCE_DIVIDER_1,           // SMCLK = 48 MHZ
-		TIMER_PERIOD,                           // 2microsec
-        TIMER_A_TAIE_INTERRUPT_DISABLE,         // Disable Timer interrupt
-        TIMER_A_CCIE_CCR0_INTERRUPT_ENABLE,// Enable CCR0 interrupt
-        TIMER_A_DO_CLEAR                        // Clear value
-};
-
-
 void setSystemClock(uint32_t CPU_Frequency)
 {
     MAP_CS_setExternalClockSourceFrequency(32768, CPU_Frequency);
@@ -67,27 +55,39 @@ void initTimers()
 {
 	startCrystalOscillator();
 	setSystemClock(CPU_FREQ);
-
-		    /* Configuring P1.0 and P1.5 as output */
+	/* Configuring P1.0 and P1.5 as output */
 	MAP_GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN5);
 	MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN5);
 	MAP_GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0);
 	MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
 
 		    /* Configuring Timer_A1 and TimerA_0 for Up Mode */
-	MAP_Timer_A_configureUpMode(TIMER_A1_MODULE, &upConfig);
-	MAP_Timer_A_configureUpMode(TIMER_A0_MODULE, &upConfig);
-		        /* Enabling interrupts and starting the timer */
+
+	/* Enabling interrupts and starting the timer */
 	MAP_Interrupt_enableSleepOnIsrExit();
 	MAP_Interrupt_enableInterrupt(INT_TA1_0);
 	MAP_Timer_A_startCounter(TIMER_A1_MODULE, TIMER_A_UP_MODE);
 	MAP_Interrupt_enableInterrupt(INT_TA0_0);
-	//MAP_Timer_A_startCounter(TIMER_A0_MODULE, TIMER_A_UP_MODE);
+	MAP_Timer_A_startCounter(TIMER_A0_MODULE, TIMER_A_UP_MODE);
 		        /* Enabling MASTER interrupts */
 	MAP_Interrupt_enableMaster();
 }
 
 
+void SetTimersPeriod(uint32_t periodConfig)
+{
+	const Timer_A_UpModeConfig upConfig =
+	{
+	        TIMER_A_CLOCKSOURCE_SMCLK,              // SMCLK Clock Source
+	        TIMER_A_CLOCKSOURCE_DIVIDER_1,           // SMCLK = 48 MHZ
+			periodConfig,
+	        TIMER_A_TAIE_INTERRUPT_DISABLE,         // Disable Timer interrupt
+	        TIMER_A_CCIE_CCR0_INTERRUPT_ENABLE,// Enable CCR0 interrupt
+	        TIMER_A_DO_CLEAR                        // Clear value
+	};
 
+	MAP_Timer_A_configureUpMode(TIMER_A1_MODULE, &upConfig);
+	MAP_Timer_A_configureUpMode(TIMER_A0_MODULE, &upConfig);
+}
 
 

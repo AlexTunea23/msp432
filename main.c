@@ -38,7 +38,7 @@ int main(void)
     InitSensors(mpu);
     InitUarts(uartModule0);
     InitUartReceive();
-    //initTimers();
+
 
     while(1)
     {
@@ -50,7 +50,6 @@ int main(void)
     			bufferIndex=0;
     	}
     	MAP_PCM_gotoLPM0();
-
     }
 }
 
@@ -72,7 +71,7 @@ void timer_a_1_isr(void)
 	}
 	if(flagTreshold==1)
 	{
-	MAP_Timer_A_startCounter(TIMER_A0_MODULE, TIMER_A_UP_MODE);
+	//MAP_Timer_A_startCounter(TIMER_A0_MODULE, TIMER_A_UP_MODE);
 	Add();
 	}
 	MAP_Timer_A_clearCaptureCompareInterrupt(TIMER_A1_MODULE,TIMER_A_CAPTURECOMPARE_REGISTER_0);
