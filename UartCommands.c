@@ -16,12 +16,10 @@
 #include"Utils.h"
 #include "Sensors.h"
 #include "Timers.h"
+#include"Accelerometer.h"
 #define sendingModule EUSCI_A0_MODULE
 #define BUFFER_SIZE  510
-
-//uint8_t monitorFlag=0;
-
-
+volatile int tresholdConfiguration;
 
 int valueX,valueX1;
 int valueY,valueY1;
@@ -37,27 +35,25 @@ char yVal[16];
 char zVal[16];
 
 
-
-
 uint8_t verifyFlag=0;
 
 
-
-
-
-
-
-
-struct Buffer {
+struct Buffer
+{
    int data[BUFFER_SIZE];
     int newest_index;
     int oldest_index;
 };
 
-enum BufferStatus {BUFFER_OK, BUFFER_EMPTY, BUFFER_FULL};
+enum BufferStatus
+{
+	BUFFER_OK,
+	BUFFER_EMPTY,
+	BUFFER_FULL
+};
 
 volatile struct Buffer rx_buffer = {{}, 0, 0};
-enum BufferStatus status;
+enum BufferStatus status1, status2, status3;
 
 
 
@@ -200,36 +196,72 @@ void SendAccelData(char *s)
 void UartCommands(char comm[30])
 {
 
-	uint32_t periodConfiguration;
+	uint32_t periodConfigurationA1,periodConfigurationA0;
 	static char *command;
-	static char *setValue;
+	static char *treshold;
+	static char *setValueA1,*setValueA0;
 	command=strtok(comm,"=");
+
+
 
 	if(strcmp(command,"start")==0)
 	{
-		verifyFlag=1;
-		initTimers();
+		//InitTimers();
+		StartTimerA1_0();
+ 		verifyFlag=1;
 	}
 
 	if(strcmp(command,"stop")==0)
 	{
 		verifyFlag=0;
+		StopTimerA1_0();
+		StopTimerA0_0();
 		SendAccelData("OK");
 	}
 
-	if(strcmp(command,"setPeriod")==0)
+	if(strcmp(command,"setPeriodA1")==0)
 	{
 		if(verifyFlag==0)
 		{
-			setValue=strtok(NULL,"}");
-			periodConfiguration=atoi(setValue);
-			SetTimersPeriod(periodConfiguration);
+			setValueA1=strtok(NULL,"}");
+			periodConfigurationA1=atoi(setValueA1);
+			periodConfigurationA1=(periodConfigurationA1/30);
+			SetTimerA1_0Period(periodConfigurationA1);
 			SendAccelData("OK");
 		}
 		else
 		{
 			SendAccelData("Cannot set period until system is STOP running!");
 		}
+	}
+	if(strcmp(command,"setPeriodA0")==0)
+		{
+			if(verifyFlag==0)
+			{
+				setValueA0=strtok(NULL,"}");
+				periodConfigurationA0=atoi(setValueA0);
+				periodConfigurationA0=(periodConfigurationA0/30);
+				SetTimerA0_0Period(periodConfigurationA0);
+				SendAccelData("OK");
+			}
+			else
+			{
+				SendAccelData("Cannot set period until system is STOP running!");
+			}
+		}
+	if(strcmp(command,"setTreshold")==0)
+	{
+		if(verifyFlag==0)
+		{
+			treshold=strtok(NULL,"}");
+			tresholdConfiguration=atoi(treshold);
+			SendAccelData("OK");
+		}
+		else
+		{
+			SendAccelData("Cannot set treshold until system is STOP running!");
+		}
+
 	}
 }
 
@@ -247,38 +279,36 @@ void Add()
 
 void Send()
 {
-		status = bufferRead(&rx_buffer, &received_byte);
-		if(status==BUFFER_OK)
-		{
-		strcpy(xVal, IntToString(received_byte));
-		SendAccelData("$");
-		SendAccelData(xVal);
-		SendAccelData(",");
-		}
-		if(status==BUFFER_OK)
-		{
-		status = bufferRead(&rx_buffer, &received_byte);
-		strcpy(yVal, IntToString(received_byte));
-		SendAccelData(yVal);
-		SendAccelData(",");
-		}
-		if(status==BUFFER_OK)
-		{
-		status = bufferRead(&rx_buffer, &received_byte);
-		strcpy(zVal, IntToString(received_byte));
-		SendAccelData(zVal);
-		//SendAccelData(",");
-		SendCharacterData(10);
-		SendCharacterData(13);
-		}
+	status1 = bufferRead(&rx_buffer, &received_byte);
+	strcpy(xVal, IntToString(received_byte));
+	status2 = bufferRead(&rx_buffer, &received_byte);
+	strcpy(yVal, IntToString(received_byte));
+	status3 = bufferRead(&rx_buffer, &received_byte);
+	strcpy(zVal, IntToString(received_byte));
+
+	if(status1==status2==status3==BUFFER_OK)
+	{
+			SendAccelData("$");
+			SendAccelData(xVal);
+			SendAccelData(",");
+			SendAccelData(yVal);
+			SendAccelData(",");
+			SendAccelData(zVal);
+			SendAccelData("#");
+			SendCharacterData(10);
+			SendCharacterData(13);
+	}
 }
 
+uint32_t GetTreshold()
+{
+	return tresholdConfiguration;
+}
 
-uint8_t Monitoring()
+uint8_t WaitUntilStart(int treshold)
 {
 	uint8_t flag=0;
 	uint8_t flag1=0;
-
 
 	if(flag1==0)
 	{
@@ -287,13 +317,10 @@ uint8_t Monitoring()
 	valueZ1=ReadSensors(zAxis);
 	flag1=1;
 	}
-
 	valueX=ReadSensors(xAxis);
 	valueY=ReadSensors(yAxis);
 	valueZ=ReadSensors(zAxis);
-
-
-	if(valueX>valueX1+50 | valueX<valueX1-50 | valueY>valueY1+50 | valueY<valueY1-50| valueZ>valueZ1+50 | valueZ<valueZ1-50 )
+	if(valueX>valueX1+treshold | valueX<valueX1-treshold | valueY>valueY1+treshold | valueY<valueY1-treshold| valueZ>valueZ1+treshold | valueZ<valueZ1-treshold )
 		{
 			flag=1;
 		}

@@ -21,11 +21,7 @@ typedef enum
 	uartModule2
 }UartMoudule;
 
-typedef enum
-{
-	startAcc,
-	startGyro
-}Commands;
+
 
 
 void InitUarts(UartMoudule name);
@@ -35,7 +31,8 @@ void SendAccelData(char *s);
 void UartCommands(char comm[30]);
 void Send();
 void Add();
-uint8_t Monitoring();
+uint8_t WaitUntilStart(int treshold);
+uint32_t GetTreshold();
 
 
 
