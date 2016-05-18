@@ -24,7 +24,7 @@ char *command;
 char *command1;
 const char s[2] = "=";
 uint8_t startFlag=0;
-
+uint8_t checkFlag=0;
 
 uint8_t flagTreshold=0;
 uint32_t setTreshold=0;
@@ -39,6 +39,7 @@ int main(void)
     InitUarts(uartModule0);
     InitUartReceive();
     InitTimers();
+
 
 
     while(1)
@@ -74,7 +75,11 @@ void timer_a_1_isr(void)
 	}
 	if(flagTreshold==1)
 	{
-	Add();
+		checkFlag=StopFlag();
+		if(checkFlag==1)
+		{
+			Add();
+		}
 	}
 	MAP_Timer_A_clearCaptureCompareInterrupt(TIMER_A1_MODULE,TIMER_A_CAPTURECOMPARE_REGISTER_0);
 }
@@ -82,10 +87,13 @@ void timer_a_1_isr(void)
 
 void timer_a_0_isr(void)
 {
-	MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN5);
-	Send();
+	checkFlag=StopFlag();
+	if(checkFlag==1)
+	{
+		Send();
+	}
 	MAP_Timer_A_clearCaptureCompareInterrupt(TIMER_A0_MODULE,TIMER_A_CAPTURECOMPARE_REGISTER_0);
-	MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN5);
+
 }
 
 

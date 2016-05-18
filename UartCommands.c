@@ -35,7 +35,7 @@ char yVal[16];
 char zVal[16];
 
 
-uint8_t verifyFlag=0;
+volatile uint8_t verifyFlag=0;
 
 
 struct Buffer
@@ -202,24 +202,20 @@ void UartCommands(char comm[30])
 	static char *setValueA1,*setValueA0;
 	command=strtok(comm,"=");
 
-
-
 	if(strcmp(command,"start")==0)
 	{
 		//InitTimers();
 		StartTimerA1_0();
  		verifyFlag=1;
 	}
-
-	if(strcmp(command,"stop")==0)
+	else if(strcmp(command,"stop")==0)
 	{
 		verifyFlag=0;
-		StopTimerA1_0();
-		StopTimerA0_0();
+		//StopTimerA0_0();
+		//StopTimerA1_0();
 		SendAccelData("OK");
 	}
-
-	if(strcmp(command,"setPeriodA1")==0)
+	else if(strcmp(command,"setPeriodA1")==0)
 	{
 		if(verifyFlag==0)
 		{
@@ -234,7 +230,7 @@ void UartCommands(char comm[30])
 			SendAccelData("Cannot set period until system is STOP running!");
 		}
 	}
-	if(strcmp(command,"setPeriodA0")==0)
+	else if(strcmp(command,"setPeriodA0")==0)
 		{
 			if(verifyFlag==0)
 			{
@@ -249,7 +245,7 @@ void UartCommands(char comm[30])
 				SendAccelData("Cannot set period until system is STOP running!");
 			}
 		}
-	if(strcmp(command,"setTreshold")==0)
+	else if(strcmp(command,"setTreshold")==0)
 	{
 		if(verifyFlag==0)
 		{
@@ -261,6 +257,9 @@ void UartCommands(char comm[30])
 		{
 			SendAccelData("Cannot set treshold until system is STOP running!");
 		}
+	}
+	else
+	{
 
 	}
 }
@@ -274,7 +273,6 @@ void Add()
 			bufferWrite(&rx_buffer, valueX);
 			bufferWrite(&rx_buffer, valueY);
 			bufferWrite(&rx_buffer, valueZ);
-
 }
 
 void Send()
@@ -328,3 +326,7 @@ uint8_t WaitUntilStart(int treshold)
 }
 
 
+uint8_t StopFlag()
+{
+	return verifyFlag;
+}

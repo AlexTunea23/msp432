@@ -33,6 +33,7 @@ void Send();
 void Add();
 uint8_t WaitUntilStart(int treshold);
 uint32_t GetTreshold();
+uint8_t StopFlag();
 
 
 

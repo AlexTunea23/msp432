@@ -49,12 +49,12 @@ void StartTimerA0_0()
 
 void StopTimerA1_0()
 {
-	MAP_Interrupt_disableInterrupt(INT_TA1_0);
+	MAP_Timer_A_stopTimer(TIMER_A1_MODULE);
 }
 
 void StopTimerA0_0()
 {
-	MAP_Interrupt_disableInterrupt(INT_TA0_0);
+	MAP_Timer_A_stopTimer(TIMER_A0_MODULE);
 }
 
 
