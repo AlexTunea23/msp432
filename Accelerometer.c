@@ -125,6 +125,11 @@ Sensor sensorMpu=
 
 Sensor defaultSensor;
 
+void SetDevice(Sensor newSensor)
+{
+	defaultSensor=newSensor;
+}
+
 void InitAccelerometer(Accelerometer Id)
 {
 

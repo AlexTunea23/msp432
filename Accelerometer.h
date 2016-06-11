@@ -51,6 +51,7 @@ typedef enum
 	r16G
 }Grange;
 
+
 void InitAccelerometer(Accelerometer Id);
 
 void ConfigAccelerometer(RangeAccelerometer Range);
